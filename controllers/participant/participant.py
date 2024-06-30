@@ -16,8 +16,8 @@ lado_quadrado = 2
 #Calculo do angulo a ser percorrido pela roda na linha recta
 angulo_linha_recta = 2*lado_quadrado/diametro_roda
 #Calculo do angulo a ser percorrido pela roda na viragem
-percurso_roda_viragem = 1/4*3.141592*(0.33/2)
-angulo_viragem = 2*percurso_roda_viragem/diametro_roda
+percurso_roda_viragem = 1/2*3.141592*0.33
+angulo_viragem = percurso_roda_viragem/diametro_roda
 robot.step(16)
 # Repeat the following 4 times (once for each side).
 for i in range(0, 4):
@@ -34,11 +34,18 @@ for i in range(0, 4):
     while valor_actual_roda_direita - valor_inicial_roda_direita <= angulo_linha_recta:
         valor_actual_roda_direita = rightWheelSensor.getValue()
         robot.step(16)
+        
+    valor_inicial_roda_direita = rightWheelSensor.getValue()    
     # Virar a direita.
     leftWheel.setPosition(1000)
     rightWheel.setPosition(-1000)
+    valor_actual_roda_direita = rightWheelSensor.getValue()
+    while valor_inicial_roda_direita - valor_actual_roda_direita <= angulo_viragem :
+        valor_actual_roda_direita = rightWheelSensor.getValue()
+        robot.step(16)
+   
     # Malha aberta - temporizador para virar a direita
-    robot.step(488)
+    #robot.step(488)
 
 # Stop the robot when path is completed, as the robot performance
 # is only computed when the robot has stopped.
